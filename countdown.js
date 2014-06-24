@@ -44,7 +44,10 @@ function getSecondsUntilEvent(ev) {
 }
 
 function secsToHMS(secs) {
-	return [(secs/3600)|0, (secs%3600/60)|0, secs % 60];
+	var s = secs % 60;
+	var m = (secs%3600 - s)/60;
+	var h = secs / 3600;
+	return [h|0, m|0, s];
 }
 
 function displayTimeUntilEvent(ev) {
