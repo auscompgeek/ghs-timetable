@@ -37,7 +37,7 @@ function getEvent(day, eventNo) {
 	};
 }
 
-function getSecondsUntilEvent(ev) {
+function getEventDate(ev) {
 	var evDate = new Date();
 	var weekday = evDate.getDay();
 
@@ -55,7 +55,15 @@ function getSecondsUntilEvent(ev) {
 	evDate.setHours(ev.hour);
 	evDate.setMinutes(ev.minute);
 	evDate.setSeconds(0);
-	return ((evDate - Date.now())/1000)|0;
+	return evDate;
+}
+
+function getSecondsUntilDate(date) {
+	return ((date - Date.now())/1000)|0;
+}
+
+function getSecondsUntilEvent(ev) {
+	return getSecondsUntilDate(getEventDate(ev));
 }
 
 function secsToHMS(secs) {
@@ -91,12 +99,13 @@ function getNextEvent() {
 	} else {
 		// weekday
 		// my day index starts with Monday, silly me
-		day -= 1;
+		day--;
 		// TODO check for end of day
 	}
 
-	var dayEvents = bells[day], eventNo = 0;
+	var dayEvents = bells[day], nextDayEvents = bells[day+1], eventNo = 0;
 	// TODO
+	day++;
 	return getEvent(day, eventNo);
 }
 
