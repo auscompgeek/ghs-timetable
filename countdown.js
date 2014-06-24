@@ -40,7 +40,7 @@ function getSecondsUntilEvent(ev) {
 	var evDate = new Date();
 	evDate.setHours(ev.hour);
 	evDate.setMinutes(ev.minute);
-	return ((evDate.getTime() - new Date().getTime())/1000)|0;
+	return ((new Date() - evDate)/1000)|0;
 }
 
 function secsToHMS(secs) {
