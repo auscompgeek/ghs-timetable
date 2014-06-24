@@ -43,14 +43,19 @@ function getSecondsUntilEvent(ev) {
 	return ((evDate.getTime() - new Date().getTime())/1000)|0;
 }
 
-function secsToHMin(secs) {
-	return [(secs/60)|0, secs % 60];
+function secsToHMS(secs) {
+	return [(secs/3600)|0, (secs%3600/60)|0, secs % 60];
 }
 
 function displayTimeUntilEvent(ev) {
-	var hmin = secsToHMin(getSecondsUntil(ev));
-	var h = hmin[0], m = hmin[1];
-	var clock = h + "h " + m "min";
+	var hms = secsToHMS(getSecondsUntil(ev));
+	var h = hms[0], m = hms[1], s = hms[2];
+	var clock = h + "h " + m "min " + s + "s";
+
+	document.getElementById("bell-countdown").textContent = clock;
+}
+
+function displayEventDesc(ev) {
 	var desc = ev.desc;
 
 	if (typeof desc === "number") {
@@ -58,10 +63,20 @@ function displayTimeUntilEvent(ev) {
 	}
 	
 	document.getElementById("bell-descript").textContent = desc;
-	document.getElementById("bell-countdown").textContent = clock;
 }
 
 function getNextEvent() {
 	// TODO
 }
 
+function displayEvent(ev) {
+	displayTimeUntilEvent(ev);
+	displayEventDesc(ev);
+}
+
+function theFinalCountdown() {
+	var ev = getNextEvent();
+	displayEvent(ev);
+}
+
+//var tick = setInterval(theFinalCountdown, 1000);
