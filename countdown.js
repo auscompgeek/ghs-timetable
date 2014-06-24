@@ -48,7 +48,7 @@ function secsToHMS(secs) {
 }
 
 function displayTimeUntilEvent(ev) {
-	var hms = secsToHMS(getSecondsUntil(ev));
+	var hms = secsToHMS(getSecondsUntilEvent(ev));
 	var h = hms[0], m = hms[1], s = hms[2];
 	var clock = h + "h " + m + "min " + s + "s";
 
