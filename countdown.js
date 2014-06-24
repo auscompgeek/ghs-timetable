@@ -92,20 +92,20 @@ function displayEventDesc(ev) {
 }
 
 function getNextEvent() {
-	var day = new Date().getDay();
+	var now = new Date();
+	var day = now.getDay();
 	if (day === 0 || day === 6) {
 		// weekend, wrap around to Monday
 		day = 0;
-	} else {
-		// weekday
+	} else if (!(now.getHours() >= 3 || (now.getHours() === 2 && (day === 3 ? now.getMinutes() > 30 : now.getMinutes() > 50)))) {
+		// TODO refactor that using date.js or something
+		// weekday, during the school day
 		// my day index starts with Monday, silly me
 		day--;
-		// TODO check for end of day
 	}
 
-	var dayEvents = bells[day], nextDayEvents = bells[day+1], eventNo = 0;
+	var dayEvents = bells[day], eventNo = 0;
 	// TODO
-	day++;
 	return getEvent(day, eventNo);
 }
 
