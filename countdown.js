@@ -40,6 +40,7 @@ function getSecondsUntilEvent(ev) {
 	var evDate = new Date();
 	evDate.setHours(ev.hour);
 	evDate.setMinutes(ev.minute);
+	evDate.setSeconds(0);
 	return ((new Date() - evDate)/1000)|0;
 }
 
