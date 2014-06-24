@@ -30,6 +30,7 @@ bells.push({
 
 function getEvent(day, eventNo) {
 	return {
+		"day": day,
 		"hour": bells[day].hours[eventNo],
 		"minute": bells[day].minutes[eventNo],
 		"desc": bells[day].desc[eventNo]
@@ -38,10 +39,23 @@ function getEvent(day, eventNo) {
 
 function getSecondsUntilEvent(ev) {
 	var evDate = new Date();
+	var weekday = evDate.getDay();
+
+	if (weekday === 6) {
+		// Saturday today, assume event is Monday
+		evDate.setDate(evDate.getDate() + 2);
+	} else if (weekday === 0) {
+		// Sunday today, assume event is Monday
+		evDate.setDate(evDate.getDate() + 1);
+	} else if (weekday === ev.day) {
+		// event is actually tomorrow
+		evDate.setDate(evDate.getDate() + 1);
+	}
+
 	evDate.setHours(ev.hour);
 	evDate.setMinutes(ev.minute);
 	evDate.setSeconds(0);
-	return ((Date.now() - evDate)/1000)|0;
+	return ((evDate - Date.now())/1000)|0;
 }
 
 function secsToHMS(secs) {
