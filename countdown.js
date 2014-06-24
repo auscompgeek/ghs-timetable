@@ -77,9 +77,9 @@ function getNextEvent() {
 		// TODO check for end of day
 	}
 
-	var dayEvents = bells[day];
+	var dayEvents = bells[day], eventNo = 0;
 	// TODO
-	return dayEvents[0];
+	return getEvent(day, eventNo);
 }
 
 function displayEvent(ev) {
