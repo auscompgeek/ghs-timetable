@@ -41,7 +41,7 @@ function getSecondsUntilEvent(ev) {
 	evDate.setHours(ev.hour);
 	evDate.setMinutes(ev.minute);
 	evDate.setSeconds(0);
-	return ((new Date() - evDate)/1000)|0;
+	return ((Date.now() - evDate)/1000)|0;
 }
 
 function secsToHMS(secs) {
@@ -91,9 +91,18 @@ function displayEvent(ev) {
 	displayEventDesc(ev);
 }
 
+// https://youtu.be/9jK-NcRmVcw
 function theFinalCountdown() {
 	var ev = getNextEvent();
 	displayEvent(ev);
 }
 
 var tick = setInterval(theFinalCountdown, 1000);
+
+// much shim, wow
+
+if (typeof Date.now !== "function") {
+	Date.now = function now() {
+		return +new Date();
+	}
+}
