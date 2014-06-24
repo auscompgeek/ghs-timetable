@@ -66,7 +66,20 @@ function displayEventDesc(ev) {
 }
 
 function getNextEvent() {
+	var day = new Date().getDay();
+	if (day === 0 || day === 6) {
+		// weekend, wrap around to Monday
+		day = 0;
+	} else {
+		// weekday
+		// my day index starts with Monday, silly me
+		day -= 1;
+		// TODO check for end of day
+	}
+
+	var dayEvents = bells[day];
 	// TODO
+	return dayEvents[0];
 }
 
 function displayEvent(ev) {
@@ -79,4 +92,4 @@ function theFinalCountdown() {
 	displayEvent(ev);
 }
 
-//var tick = setInterval(theFinalCountdown, 1000);
+var tick = setInterval(theFinalCountdown, 1000);
