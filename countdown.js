@@ -1,4 +1,4 @@
-// INITIALISE THE GODDAMN BELLS
+// gotta initialise those bells
 
 var bells = [
 // Monday
@@ -26,7 +26,7 @@ bells.push({
 	"desc": ["House Group", 1, "Recess 1", 2, "Recess 2", 3, "Lunch 1", "Lunch 2", 4, "School Ends"]
 });
 
-// HALP WHAT AM I DOING
+// halp what am I even doing
 
 function getEvent(day, eventNo) {
 	return {
@@ -93,19 +93,25 @@ function displayEventDesc(ev) {
 
 function getNextEvent() {
 	var now = new Date();
-	var day = now.getDay();
-	if (day === 0 || day === 6) {
+	var day = now.getDay() - 1;
+	var nowH = now.getHours(), nowM = now.getMinutes();
+	var dayEvents = bells[day], eventNo = 0;
+
+	if (day === -1 || day === 5) {
 		// weekend, wrap around to Monday
 		day = 0;
-	} else if (!(now.getHours() >= 3 || (now.getHours() === 2 && (day === 3 ? now.getMinutes() > 30 : now.getMinutes() > 50)))) {
-		// TODO refactor that using date.js or something
-		// weekday, during the school day
-		// my day index starts with Monday, silly me
-		day--;
+		eventNo = 0;
+	} else if (nowH > dayEvents.hours[9] || (nowH == dayEvents.hours[9] && nowM > dayEvents.minutes[9])) {
+		// past the school day, wrap to next morning
+		day++;
+		eventNo = 0;
+	} else {
+		// calculate next event
+		while (eventNo < 9 && (nowH < dayEvents.hours[eventNo] || (nowH == dayEvents.hours[eventNo] && nowM > dayEvents.minutes[eventNo]))) {
+			eventNo++;
+		}
 	}
 
-	var dayEvents = bells[day], eventNo = 0;
-	// TODO
 	return getEvent(day, eventNo);
 }
 
