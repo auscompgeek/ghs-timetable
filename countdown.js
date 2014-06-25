@@ -107,7 +107,7 @@ function getNextEvent() {
 		eventNo = 0;
 	} else {
 		// calculate next event
-		while (eventNo < 9 && (nowH < dayEvents.hours[eventNo] || (nowH == dayEvents.hours[eventNo] && nowM > dayEvents.minutes[eventNo]))) {
+		while (eventNo < 9 && (nowH > dayEvents.hours[eventNo] || (nowH == dayEvents.hours[eventNo] && nowM > dayEvents.minutes[eventNo]))) {
 			eventNo++;
 		}
 	}
