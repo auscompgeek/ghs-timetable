@@ -13,3 +13,9 @@ body {
 #bell-countdown {
 	font-size: 6em;
 }
+
+@media (max-width: 767px) {
+	#bell-countdown {
+		font-size: 5em;
+	}
+}
