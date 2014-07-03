@@ -21,7 +21,7 @@ bells.push(bells[0]);  // Thursday
 
 // Friday
 bells.push({
-	"hours":   [ 8,  8,  9, 10, 11, 11, 13, 13, 13, 14],
+	"hours": bells[0].hours,
 	"minutes": [25, 35, 55, 15, 35, 50, 10, 25, 40, 50],
 	"desc": bells[0].desc
 });
@@ -56,34 +56,6 @@ function getEventDate(ev) {
 	return evDate;
 }
 
-function getSecondsUntilDate(date) {
-	return ((date - Date.now())/1000)|0;
-}
-
-function getSecondsUntilEvent(ev) {
-	return getSecondsUntilDate(getEventDate(ev));
-}
-
-function displayTimeUntilEvent(ev) {
-	var secs = getSecondsUntilEvent(ev);
-	var s = secs % 60;
-	var m = ((secs%3600 - s)/60)|0;
-	var h = (secs / 3600)|0;
-	var clock = (h ? h + "h " : "") + m + "min " + s + "s";
-
-	document.getElementById("bell-countdown").textContent = clock;
-}
-
-function displayEventDesc(ev) {
-	var desc = ev.desc;
-
-	if (typeof desc === "number") {
-		desc = "Period " + desc;
-	}
-	
-	document.getElementById("bell-descript").textContent = desc;
-}
-
 function getNextEvent() {
 	var now = new Date();
 	var day = now.getDay() - 1;
@@ -106,17 +78,25 @@ function getNextEvent() {
 	return getEvent(day, eventNo);
 }
 
-function displayEvent(ev) {
-	displayTimeUntilEvent(ev);
-	displayEventDesc(ev);
-}
-
 // https://youtu.be/9jK-NcRmVcw
 function theFinalCountdown() {
-	displayEvent(getNextEvent());
+	var ev = getNextEvent();
+	$("#bell-countdown").countdown({
+		until: getEventDate(ev),
+		format: "dhMS",
+		compact: true,
+		significant: 2,
+		onExpiry: function () {
+			$("#bell-countdown").text("... about now.");
+			setTimeout(theFinalCountdown, 60*1000);
+		},
+		// oh god what am I doing
+		layout: "{d<}{dn}d {d>}{h<}{hn}h {h>}{mn}min {sn}s"
+	});
+	$("#bell-descript").text(ev.desc);
 }
 
-var tick = setInterval(theFinalCountdown, 1000);
+$(theFinalCountdown);
 
 // much shim, wow
 
