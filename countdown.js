@@ -21,70 +21,45 @@ bells.push(bells[0]);  // Thursday
 
 // Friday
 bells.push({
-	"hours":   [ 8,  8,  9, 10, 11, 11, 13, 13, 13, 14],
+	"hours": bells[0].hours,
 	"minutes": [25, 35, 55, 15, 35, 50, 10, 25, 40, 50],
 	"desc": bells[0].desc
 });
 
 // halp what am I even doing
 
-function getEvent(day, eventNo) {
+function BellEvent(day, eventNo) {
 	var dayEvents = bells[day];
-	return {
-		"day": day,
-		"hour": dayEvents.hours[eventNo],
-		"minute": dayEvents.minutes[eventNo],
-		"desc": dayEvents.desc[eventNo]
-	};
+
+	this.day = day;
+	this.hour = dayEvents.hours[eventNo];
+	this.minute = dayEvents.minutes[eventNo];
+	this.desc = dayEvents.desc[eventNo];
+
+	if (typeof this.desc === "number") {
+		this.desc = "Period " + this.desc;
+	}
 }
 
-function getEventDate(ev) {
-	var evDate = new Date();
-	var weekday = evDate.getDay();
+BellEvent.prototype.getDate = function getDate() {
+	var date = new Date();
+	var weekday = date.getDay();
 
 	if (weekday === 6) {
 		// Saturday today, wrap to Monday
-		evDate.setDate(evDate.getDate() + 2);
-	} else if (weekday === ev.day) {
+		date.setDate(date.getDate() + 2);
+	} else if (weekday === this.day) {
 		// event is tomorrow
-		evDate.setDate(evDate.getDate() + 1);
+		date.setDate(date.getDate() + 1);
 	}
 
-	evDate.setHours(ev.hour);
-	evDate.setMinutes(ev.minute);
-	evDate.setSeconds(0);
-	return evDate;
-}
+	date.setHours(this.hour);
+	date.setMinutes(this.minute);
+	date.setSeconds(0);
+	return date;
+};
 
-function getSecondsUntilDate(date) {
-	return ((date - Date.now())/1000)|0;
-}
-
-function getSecondsUntilEvent(ev) {
-	return getSecondsUntilDate(getEventDate(ev));
-}
-
-function displayTimeUntilEvent(ev) {
-	var secs = getSecondsUntilEvent(ev);
-	var s = secs % 60;
-	var m = ((secs%3600 - s)/60)|0;
-	var h = (secs / 3600)|0;
-	var clock = (h ? h + "h " : "") + m + "min " + s + "s";
-
-	document.getElementById("bell-countdown").textContent = clock;
-}
-
-function displayEventDesc(ev) {
-	var desc = ev.desc;
-
-	if (typeof desc === "number") {
-		desc = "Period " + desc;
-	}
-	
-	document.getElementById("bell-descript").textContent = desc;
-}
-
-function getNextEvent() {
+BellEvent.getNext = function getNext() {
 	var now = new Date();
 	var day = now.getDay() - 1;
 	var nowH = now.getHours(), nowM = now.getMinutes();
@@ -103,25 +78,38 @@ function getNextEvent() {
 		}
 	}
 
-	return getEvent(day, eventNo);
+	return new this(day, eventNo);
 }
 
-function displayEvent(ev) {
-	displayTimeUntilEvent(ev);
-	displayEventDesc(ev);
+function updateCountdown(event) {
+	var format = "%-Mmin %-Ss";
+
+	if (event.offset.totalDays) {
+		// some days left, show days *and* hours
+		format = "%-Dd %-Hh " + format;
+	} else if (event.offset.hours) {
+		// some hours left, show hours
+		format = "%-Hh " + format;
+	}
+
+	$(this).text(event.strftime(format));
+}
+
+function finishCountdown() {
+	$(this).text("... about now.");
+	// set the new countdown after a minute
+	setTimeout(theFinalCountdown, 60*1000);
 }
 
 // https://youtu.be/9jK-NcRmVcw
 function theFinalCountdown() {
-	displayEvent(getNextEvent());
+	var ev = BellEvent.getNext();
+
+	$("#bell-countdown").countdown(ev.getDate())
+	.on("update.countdown", updateCountdown)
+	.on("finish.countdown", finishCountdown);
+
+	$("#bell-descript").text(ev.desc);
 }
 
-var tick = setInterval(theFinalCountdown, 1000);
-
-// much shim, wow
-
-if (typeof Date.now !== "function") {
-	Date.now = function now() {
-		return +new Date();
-	}
-}
+$(theFinalCountdown);
