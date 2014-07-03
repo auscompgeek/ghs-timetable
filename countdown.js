@@ -28,42 +28,38 @@ bells.push({
 
 // halp what am I even doing
 
-function getEvent(day, eventNo) {
+function BellEvent(day, eventNo) {
 	var dayEvents = bells[day];
-	return new BellEvent(day, dayEvents.hours[eventNo], dayEvents.minutes[eventNo], dayEvents.desc[eventNo]);
-}
 
-function BellEvent(day, hour, minute, desc) {
 	this.day = day;
-	this.hour = hour;
-	this.minute = minute;
+	this.hour = dayEvents.hours[eventNo];
+	this.minute = dayEvents.minutes[eventNo];
+	this.desc = dayEvents.desc[eventNo];
 
-	if (typeof desc === "number") {
-		desc = "Period " + desc;
+	if (typeof this.desc === "number") {
+		this.desc = "Period " + this.desc;
 	}
-
-	this.desc = desc;
 }
 
 BellEvent.prototype.getDate = function getDate() {
-	var evDate = new Date();
-	var weekday = evDate.getDay();
+	var date = new Date();
+	var weekday = date.getDay();
 
 	if (weekday === 6) {
 		// Saturday today, wrap to Monday
-		evDate.setDate(evDate.getDate() + 2);
+		date.setDate(date.getDate() + 2);
 	} else if (weekday === this.day) {
 		// event is tomorrow
-		evDate.setDate(evDate.getDate() + 1);
+		date.setDate(date.getDate() + 1);
 	}
 
-	evDate.setHours(this.hour);
-	evDate.setMinutes(this.minute);
-	evDate.setSeconds(0);
-	return evDate;
+	date.setHours(this.hour);
+	date.setMinutes(this.minute);
+	date.setSeconds(0);
+	return date;
 };
 
-function getNextEvent() {
+BellEvent.getNext = function getNext() {
 	var now = new Date();
 	var day = now.getDay() - 1;
 	var nowH = now.getHours(), nowM = now.getMinutes();
@@ -82,7 +78,7 @@ function getNextEvent() {
 		}
 	}
 
-	return getEvent(day, eventNo);
+	return new this(day, eventNo);
 }
 
 function updateCountdown(event) {
@@ -99,27 +95,21 @@ function updateCountdown(event) {
 	$(this).text(event.strftime(format));
 }
 
+function finishCountdown() {
+	$(this).text("... about now.");
+	// set the new countdown after a minute
+	setTimeout(theFinalCountdown, 60*1000);
+}
+
 // https://youtu.be/9jK-NcRmVcw
 function theFinalCountdown() {
-	var ev = getNextEvent();
+	var ev = BellEvent.getNext();
 
 	$("#bell-countdown").countdown(ev.getDate())
-		.on("update.countdown", updateCountdown)
-		.on("finish.countdown", function () {
-			$("#bell-countdown").text("... about now.");
-			// set the new countdown after a minute
-			setTimeout(theFinalCountdown, 60*1000);
-		});
+	.on("update.countdown", updateCountdown)
+	.on("finish.countdown", finishCountdown);
 
 	$("#bell-descript").text(ev.desc);
 }
 
 $(theFinalCountdown);
-
-// much shim, wow
-
-if (typeof Date.now !== "function") {
-	Date.now = function now() {
-		return +new Date();
-	}
-}
