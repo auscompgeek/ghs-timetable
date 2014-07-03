@@ -21,7 +21,7 @@ bells.push(bells[0]);  // Thursday
 
 // Friday
 bells.push({
-	"hours":   [ 8,  8,  9, 10, 11, 11, 13, 13, 13, 14],
+	"hours": bells[0].hours,
 	"minutes": [25, 35, 55, 15, 35, 50, 10, 25, 40, 50],
 	"desc": bells[0].desc
 });
@@ -56,34 +56,6 @@ function getEventDate(ev) {
 	return evDate;
 }
 
-function getSecondsUntilDate(date) {
-	return ((date - Date.now())/1000)|0;
-}
-
-function getSecondsUntilEvent(ev) {
-	return getSecondsUntilDate(getEventDate(ev));
-}
-
-function displayTimeUntilEvent(ev) {
-	var secs = getSecondsUntilEvent(ev);
-	var s = secs % 60;
-	var m = ((secs%3600 - s)/60)|0;
-	var h = (secs / 3600)|0;
-	var clock = (h ? h + "h " : "") + m + "min " + s + "s";
-
-	document.getElementById("bell-countdown").textContent = clock;
-}
-
-function displayEventDesc(ev) {
-	var desc = ev.desc;
-
-	if (typeof desc === "number") {
-		desc = "Period " + desc;
-	}
-	
-	document.getElementById("bell-descript").textContent = desc;
-}
-
 function getNextEvent() {
 	var now = new Date();
 	var day = now.getDay() - 1;
@@ -106,17 +78,36 @@ function getNextEvent() {
 	return getEvent(day, eventNo);
 }
 
-function displayEvent(ev) {
-	displayTimeUntilEvent(ev);
-	displayEventDesc(ev);
+function updateCountdown(event) {
+	var format = "%Mmin %Ss";
+
+	if (event.offset.totalDays) {
+		// some days left, show days *and* hours
+		format = "%Dd %Hh " + format;
+	} else if (event.offset.hours) {
+		// some hours left, show hours
+		format = "%Hh " + format;
+	}
+
+	$(this).text(event.strftime(format));
 }
 
 // https://youtu.be/9jK-NcRmVcw
 function theFinalCountdown() {
-	displayEvent(getNextEvent());
+	var ev = getNextEvent();
+
+	$("#bell-countdown").countdown(getEventDate(ev))
+		.on("update.countdown", updateCountdown)
+		.on("finish.countdown", function () {
+			$("#bell-countdown").text("... about now.");
+			// set the new countdown after a minute
+			setTimeout(theFinalCountdown, 60*1000);
+		});
+
+	$("#bell-descript").text(ev.desc);
 }
 
-var tick = setInterval(theFinalCountdown, 1000);
+$(theFinalCountdown);
 
 // much shim, wow
 
