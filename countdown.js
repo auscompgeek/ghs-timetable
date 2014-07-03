@@ -86,14 +86,14 @@ function getNextEvent() {
 }
 
 function updateCountdown(event) {
-	var format = "%Mmin %Ss";
+	var format = "%-Mmin %-Ss";
 
 	if (event.offset.totalDays) {
 		// some days left, show days *and* hours
-		format = "%Dd %Hh " + format;
+		format = "%-Dd %-Hh " + format;
 	} else if (event.offset.hours) {
 		// some hours left, show hours
-		format = "%Hh " + format;
+		format = "%-Hh " + format;
 	}
 
 	$(this).text(event.strftime(format));
