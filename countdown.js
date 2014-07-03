@@ -30,31 +30,38 @@ bells.push({
 
 function getEvent(day, eventNo) {
 	var dayEvents = bells[day];
-	return {
-		"day": day,
-		"hour": dayEvents.hours[eventNo],
-		"minute": dayEvents.minutes[eventNo],
-		"desc": dayEvents.desc[eventNo]
-	};
+	return new BellEvent(day, dayEvents.hours[eventNo], dayEvents.minutes[eventNo], dayEvents.desc[eventNo]);
 }
 
-function getEventDate(ev) {
+function BellEvent(day, hour, minute, desc) {
+	this.day = day;
+	this.hour = hour;
+	this.minute = minute;
+
+	if (typeof desc === "number") {
+		desc = "Period " + desc;
+	}
+
+	this.desc = desc;
+}
+
+BellEvent.prototype.getDate = function getDate() {
 	var evDate = new Date();
 	var weekday = evDate.getDay();
 
 	if (weekday === 6) {
 		// Saturday today, wrap to Monday
 		evDate.setDate(evDate.getDate() + 2);
-	} else if (weekday === ev.day) {
+	} else if (weekday === this.day) {
 		// event is tomorrow
 		evDate.setDate(evDate.getDate() + 1);
 	}
 
-	evDate.setHours(ev.hour);
-	evDate.setMinutes(ev.minute);
+	evDate.setHours(this.hour);
+	evDate.setMinutes(this.minute);
 	evDate.setSeconds(0);
 	return evDate;
-}
+};
 
 function getNextEvent() {
 	var now = new Date();
@@ -96,7 +103,7 @@ function updateCountdown(event) {
 function theFinalCountdown() {
 	var ev = getNextEvent();
 
-	$("#bell-countdown").countdown(getEventDate(ev))
+	$("#bell-countdown").countdown(ev.getDate())
 		.on("update.countdown", updateCountdown)
 		.on("finish.countdown", function () {
 			$("#bell-countdown").text("... about now.");
