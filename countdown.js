@@ -113,3 +113,30 @@ function theFinalCountdown() {
 }
 
 $(theFinalCountdown);
+
+// oh god holidays
+function parseTerms(data) {
+	var termDates = data.results.termDates;
+	window.termsStart = [];
+	window.termsEnd = [];
+	for (var i = 1, term; term = termDates[i]; i++) {
+		if (term.title.contains(" for students (Eastern ")) {
+			termsStart.push(new Date(term.start));
+			termsEnd.push(new Date(term.end));
+		}
+	};
+}
+
+$.ajax({
+	"url": "https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75&callback=parseTerms",
+	"crossDomain": true,
+	"dataType": "jsonp"
+});
+
+// much shim, wow
+// thank you based MDN
+if (typeof String.prototype.contains !== "function") {
+	String.prototype.contains = function contains() {
+		return String.prototype.indexOf.apply(this, arguments) !== -1;
+	}
+}
