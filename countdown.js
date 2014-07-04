@@ -1,3 +1,15 @@
+// constants and stuff
+
+var NEW_YEAR = 0,
+	TERM_1 = 1,
+	HOLIDAYS_AUTUMN = 2,
+	TERM_2 = 3,
+	HOLIDAYS_WINTER = 4,
+	TERM_3 = 5,
+	HOLIDAYS_SPRING = 6,
+	TERM_4 = 7,
+	CHRISTMAS = 8;
+
 // gotta initialise those bells
 
 var bells = [
@@ -29,7 +41,12 @@ bells.push({
 // halp what am I even doing
 
 function BellEvent(day, eventNo) {
-	var dayEvents = bells[day];
+	var dayEvents;
+	if (day.constructor === Date) {
+		dayEvents = bells[day.getDay() - 1];
+	} else {
+		dayEvents = bells[day];
+	}
 
 	this.day = day;
 	this.hour = dayEvents.hours[eventNo];
@@ -38,19 +55,26 @@ function BellEvent(day, eventNo) {
 
 	if (typeof this.desc === "number") {
 		this.desc = "Period " + this.desc;
+	} else if (day.constructor === Date) {
+		this.holidays = true;
 	}
 }
 
 BellEvent.prototype.getDate = function getDate() {
-	var date = new Date();
-	var weekday = date.getDay();
+	var date;
+	if (this.day.constructor === Date) {
+		date = new Date(this.day);
+	} else {
+		date = new Date();
+		var weekday = date.getDay();
 
-	if (weekday === 6) {
-		// Saturday today, wrap to Monday
-		date.setDate(date.getDate() + 2);
-	} else if (weekday === this.day) {
-		// event is tomorrow
-		date.setDate(date.getDate() + 1);
+		if (weekday === 6) {
+			// Saturday today, wrap to Monday
+			date.setDate(date.getDate() + 2);
+		} else if (weekday === this.day) {
+			// event is tomorrow
+			date.setDate(date.getDate() + 1);
+		}
 	}
 
 	date.setHours(this.hour);
@@ -61,6 +85,12 @@ BellEvent.prototype.getDate = function getDate() {
 
 BellEvent.getNext = function getNext() {
 	var now = new Date();
+	var term = getTerm(now);
+	if (!(term & 1)) {
+		// holidays, yay
+		return new this(terms[term], 0);
+	}
+
 	var day = now.getDay() - 1;
 	var nowH = now.getHours(), nowM = now.getMinutes();
 	var dayEvents = bells[day], eventNo = 0;
@@ -115,16 +145,31 @@ function theFinalCountdown() {
 $(theFinalCountdown);
 
 // oh god holidays
+
 function parseTerms(data) {
 	var termDates = data.results.termDates;
-	window.termsStart = [];
-	window.termsEnd = [];
+	window.terms = [];
 	for (var i = 1, term; term = termDates[i]; i++) {
+		// we only care for students in the eastern division
 		if (term.title.contains(" for students (Eastern ")) {
-			termsStart.push(new Date(term.start));
-			termsEnd.push(new Date(term.end));
+			terms.push(new Date(term.start));
+			var end = new Date(term.end);
+			var endEvents = bells[end.getDay() - 1];
+			end.setHours(endEvents.hours[9]);
+			end.setMinutes(endEvents.minutes[9]);
+			terms.push(end);
 		}
-	};
+	}
+}
+
+function getTerm(date) {
+	var time = +date;
+	for (var i = 0; i < 8; i++) {
+		if (time < terms[i]) {
+			return i;
+		}
+	}
+	return CHRISTMAS;
 }
 
 $.ajax({
