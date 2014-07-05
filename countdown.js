@@ -10,6 +10,8 @@ var NEW_YEAR = 0,
 	TERM_4 = 7,
 	CHRISTMAS = 8;
 
+var SOME_TERM = -1;  // not sure about term dates
+
 // gotta initialise those bells
 
 var bells = [
@@ -142,8 +144,6 @@ function theFinalCountdown() {
 	$("#bell-descript").text(ev.desc);
 }
 
-$(theFinalCountdown);
-
 // oh god holidays
 
 function parseTerms(data) {
@@ -163,6 +163,11 @@ function parseTerms(data) {
 }
 
 function getTerm(date) {
+	if (!window.terms) {
+		// we have no idea when the terms are, bail
+		return SOME_TERM;
+	}
+
 	var time = +date;
 	for (var i = 0; i < 8; i++) {
 		if (time < terms[i]) {
@@ -172,11 +177,8 @@ function getTerm(date) {
 	return CHRISTMAS;
 }
 
-$.ajax({
-	"url": "https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75&callback=parseTerms",
-	"crossDomain": true,
-	"dataType": "jsonp"
-});
+$.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75", parseTerms)
+	.always(theFinalCountdown);
 
 // much shim, wow
 // thank you based MDN
