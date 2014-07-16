@@ -81,7 +81,7 @@ BellEvent.prototype.getDate = function getDate() {
 
 	date.setHours(this.hour);
 	date.setMinutes(this.minute);
-	date.setSeconds(0);
+	date.setSeconds(secsOffset);
 	return date;
 };
 
@@ -144,6 +144,19 @@ function theFinalCountdown() {
 	$("#bell-descript").text(ev.desc);
 }
 
+// school computers don't even know what time it is
+
+var secsOffset = 0;
+
+$.ajax({
+	url: "http://vovo.id.au/scripts/time.php",
+	async: true,
+	dataType: "text",
+	success: function (data) {
+		secsOffset = data - (Date.now()/1000>>>0);
+	}
+});
+
 // oh god holidays
 
 function parseTerms(data) {
@@ -185,5 +198,11 @@ $.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEm
 if (typeof String.prototype.contains !== "function") {
 	String.prototype.contains = function contains() {
 		return String.prototype.indexOf.apply(this, arguments) !== -1;
+	}
+}
+
+if (typeof Date.now !== "function") {
+	Date.now = function now() {
+		return +new Date();
 	}
 }
