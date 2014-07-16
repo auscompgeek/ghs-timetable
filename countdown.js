@@ -146,6 +146,7 @@ function theFinalCountdown() {
 
 // school computers don't even know what time it is
 
+// amount of time system clock is ahead by
 var secsOffset = 0;
 
 $.ajax({
@@ -153,7 +154,7 @@ $.ajax({
 	async: true,
 	dataType: "text",
 	success: function (data) {
-		secsOffset = data - (Date.now()/1000>>>0);
+		secsOffset = (Date.now()/1000>>>0) - data;
 	}
 });
 
