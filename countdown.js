@@ -1,3 +1,18 @@
+// much shim, wow
+// thank you based MDN
+
+if (typeof String.prototype.contains !== "function") {
+	String.prototype.contains = function contains() {
+		return String.prototype.indexOf.apply(this, arguments) !== -1;
+	}
+}
+
+if (typeof Date.now !== "function") {
+	Date.now = function now() {
+		return +new Date();
+	}
+}
+
 // constants and stuff
 
 var NEW_YEAR = 0,
@@ -46,6 +61,7 @@ function BellEvent(day, eventNo) {
 	var dayEvents;
 	if (day.constructor === Date) {
 		dayEvents = bells[day.getDay() - 1];
+		this.holidays = true;
 	} else {
 		dayEvents = bells[day];
 	}
@@ -53,13 +69,17 @@ function BellEvent(day, eventNo) {
 	this.day = day;
 	this.hour = dayEvents.hours[eventNo];
 	this.minute = dayEvents.minutes[eventNo];
-	this.desc = dayEvents.desc[eventNo];
+	this._desc = dayEvents.desc[eventNo];
+}
 
-	if (typeof this.desc === "number") {
-		this.desc = "Period " + this.desc;
-	} else if (day.constructor === Date) {
-		this.holidays = true;
+BellEvent.prototype.getDesc = function getDesc() {
+	if (typeof this._desc === "number") {
+		return "Period " + this._desc;
 	}
+	if (this.holidays) {
+		return "School starts";
+	}
+	return this._desc;
 }
 
 BellEvent.prototype.getDate = function getDate() {
@@ -141,7 +161,7 @@ function theFinalCountdown() {
 	.on("update.countdown", updateCountdown)
 	.on("finish.countdown", finishCountdown);
 
-	$("#bell-descript").text(ev.desc);
+	$("#bell-descript").text(ev.getDesc());
 }
 
 // school computers don't even know what time it is
@@ -151,7 +171,7 @@ var secsOffset = 0;
 
 $.ajax({
 	url: "http://vovo.id.au/scripts/time.php",
-	async: true,
+	async: false,
 	dataType: "text",
 	success: function (data) {
 		secsOffset = (Date.now()/1000>>>0) - data;
@@ -193,17 +213,3 @@ function getTerm(date) {
 
 $.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75", parseTerms)
 	.always(theFinalCountdown);
-
-// much shim, wow
-// thank you based MDN
-if (typeof String.prototype.contains !== "function") {
-	String.prototype.contains = function contains() {
-		return String.prototype.indexOf.apply(this, arguments) !== -1;
-	}
-}
-
-if (typeof Date.now !== "function") {
-	Date.now = function now() {
-		return +new Date();
-	}
-}
