@@ -134,7 +134,7 @@ BellEvent.getNext = function getNext() {
 }
 
 function updateCountdown(event) {
-	var format = "%-Mm %-Ss";
+	var format = "%-Mm %Ss";
 
 	if (event.offset.totalDays) {
 		// some days left, show days *and* hours
