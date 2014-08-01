@@ -57,6 +57,8 @@ bells.push({
 
 // halp what am I even doing
 
+$.ajaxSetup({ timeout: 5000 });  // make it usable
+
 function BellEvent(day, eventNo) {
 	var dayEvents;
 	if (day.constructor === Date) {
@@ -107,6 +109,8 @@ BellEvent.prototype.getDate = function getDate() {
 
 BellEvent.getNext = function getNext() {
 	var now = new Date();
+	now.setSeconds(now.getSeconds() + secsOffset);
+
 	var term = getTerm(now);
 	if (!(term & 1)) {
 		// holidays, yay
@@ -120,7 +124,7 @@ BellEvent.getNext = function getNext() {
 	if (day === -1 || day === 5) {
 		// weekend, wrap around to Monday
 		day = 0;
-	} else if (nowH > dayEvents.hours[9] || (nowH == dayEvents.hours[9] && nowM > dayEvents.minutes[9])) {
+	} else if (nowH > dayEvents.hours[9] || (nowH === dayEvents.hours[9] && nowM > dayEvents.minutes[9])) {
 		// past the school day, wrap to next morning
 		day++;
 	} else {
@@ -150,7 +154,7 @@ function updateCountdown(event) {
 function finishCountdown() {
 	$(this).text("... about now.");
 	// set the new countdown after a minute
-	setTimeout(theFinalCountdown, 60*1000);
+	setTimeout(theFinalCountdown, 30000);
 }
 
 // https://youtu.be/9jK-NcRmVcw
@@ -182,7 +186,7 @@ $.ajax({
 
 function parseTerms(data) {
 	var termDates = data.results.termDates;
-	window.terms = [];
+	var terms = [];
 	for (var i = 1, term; term = termDates[i]; i++) {
 		// we only care for students in the eastern division
 		if (term.title.contains(" for students (Eastern ")) {
@@ -194,6 +198,7 @@ function parseTerms(data) {
 			terms.push(end);
 		}
 	}
+	window.terms = terms;
 }
 
 function getTerm(date) {
