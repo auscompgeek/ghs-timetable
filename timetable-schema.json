@@ -1,0 +1,38 @@
+{
+	"studentName": {
+		"type": "string"
+	},
+	"yearGroup": {
+		"type": "unsigned int"
+	},
+	"classes": {
+		"type": "dict[]",
+		"fields": {
+			"subjectName": {
+				"type": "string",
+				"nullable": false
+			},
+			"room": {
+				"type": "string",
+				"nullable": false,
+				"help_text": "The classroom the class is normally in."
+			}
+		}
+	},
+	"days": {
+		"type": "dict[][]",
+		"help_text": "an array storing an array of classes",
+		"fields": {
+			"classId": {
+				"type": "unsigned int",
+				"nullable": false,
+				"help_text": "index from classes array (-1 for study periods, -2 for non-class extension periods)"
+			},
+			"room": {
+				"type": "string",
+				"nullable": true,
+				"help_text": "The classroom the class is in during that period, if it differs from normal."
+			}
+		}
+	}
+}
