@@ -76,10 +76,42 @@ function BellEvent(day, eventNo) {
 
 BellEvent.prototype.getDesc = function getDesc() {
 	if (typeof this._desc === "number") {
+		var pNum = this._desc;
+
+		if (window.localStorage && localStorage.useTimetable) {
+			var todayClasses = localStorage.days[this.day];
+			var classes = localStorage.classes;
+
+			if (classes && classes.length && todayClasses && todayClasses.length >= pNum) {
+				var period = todayClasses[pNum];
+				if (period && typeof period.classId === "number") {
+					if (period.classId === -1) {
+						// study period
+						return "Period " + pNum + " (study)";
+					}
+					if (period.classId === -2) {
+						// extension period, but we don't have class
+						// this should never happen.
+						return "Period " + pNum + "!?";
+					}
+
+					var subject = classes[period.classId];
+					var room = period.room || subject.room;
+					var desc = "[" + pNum + "] " + subject.subjectName;
+
+					if (room) {
+						desc += " (" + room + ")";
+					}
+					return desc;
+				}
+			}
+		}
+
 		return "Period " + this._desc;
 	}
+
 	if (this.holidays) {
-		return "School starts";
+		return "School Starts";
 	}
 	return this._desc;
 }
