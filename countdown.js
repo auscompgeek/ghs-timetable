@@ -79,8 +79,8 @@ BellEvent.prototype.getDesc = function getDesc() {
 		var pNum = this._desc;
 
 		if (window.localStorage && localStorage.useTimetable) {
-			var todayClasses = localStorage.days[this.day];
-			var classes = localStorage.classes;
+			var todayClasses = JSON.parse(localStorage.days)[this.day];
+			var classes = JSON.parse(localStorage.classes);
 
 			if (classes && classes.length && todayClasses && todayClasses.length >= pNum) {
 				var period = todayClasses[pNum];
@@ -97,7 +97,7 @@ BellEvent.prototype.getDesc = function getDesc() {
 
 					var subject = classes[period.classId];
 					var room = period.room || subject.room;
-					var desc = "[" + pNum + "] " + subject.subjectName;
+					var desc = "P" + pNum + ": " + subject.subjectName;
 
 					if (room) {
 						desc += " (" + room + ")";
