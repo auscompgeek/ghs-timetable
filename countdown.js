@@ -37,7 +37,12 @@ var bells = [
 	"desc": ["House Group", 1, "Recess 1", 2, "Recess 2", 3, "Lunch 1", "Lunch 2", 4, "School Ends"]
 }];
 
-bells.push(bells[0]);  // Tuesday
+// Tuesday
+bells.push({
+	"hours": bells[0].hours.slice(),
+	"minutes": bells[0].minutes.slice(),
+	"desc": bells[0].desc.slice()
+});
 
 // Wednesday
 bells.push({
@@ -46,13 +51,18 @@ bells.push({
 	"desc": ["House Group", 1, 2, "Recess", "Assembly", 3, "Lunch 1", "Lunch 2", "Sport", "School Ends"]
 });
 
-bells.push(bells[0]);  // Thursday
+// Thursday
+bells.push({
+	"hours": bells[0].hours.slice(),
+	"minutes": bells[0].minutes.slice(),
+	"desc": bells[0].desc.slice()
+});
 
 // Friday
 bells.push({
-	"hours": bells[0].hours,
+	"hours": bells[0].hours.slice(),
 	"minutes": [25, 35, 55, 15, 35, 50, 10, 25, 40, 50],
-	"desc": bells[0].desc
+	"desc": bells[0].desc.slice()
 });
 
 // extension classes, yay...
