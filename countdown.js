@@ -55,6 +55,35 @@ bells.push({
 	"desc": bells[0].desc
 });
 
+// extension classes, yay...
+
+function addExtClasses() {
+	if (window.localStorage && localStorage.useTimetable) {
+		var days = JSON.parse(localStorage.days);
+
+		for (var day = 0; day < 5; day++) {
+			var dayEvents = bells[day];
+			var classes = days[day];
+
+			if (classes[0] && classes[0].classId != -2) {
+				// P0 aka morning class
+				dayEvents.hours.unshift(7);
+				dayEvents.minutes.unshift(30);
+				dayEvents.desc.unshift(0);
+			}
+
+			if (classes[5] && classes[5].classId != -2) {
+				// P5 aka afternoon class
+				dayEvents.hours.push(4);
+				dayEvents.minutes.push(0);
+				dayEvents.desc.splice(dayBells.desc.length - 1, 0, 5);
+			}
+		}
+	}
+}
+
+addExtClasses();
+
 // halp what am I even doing
 
 $.ajaxSetup({ timeout: 5000 });  // make it usable
@@ -152,16 +181,17 @@ BellEvent.getNext = function getNext() {
 	var day = now.getDay() - 1;
 	var nowH = now.getHours(), nowM = now.getMinutes();
 	var dayEvents = bells[day], eventNo = 0;
+	var lastEvNo = dayEvents.hours.length - 1;
 
 	if (day === -1 || day === 5) {
 		// weekend, wrap around to Monday
 		day = 0;
-	} else if (nowH > dayEvents.hours[9] || (nowH === dayEvents.hours[9] && nowM > dayEvents.minutes[9])) {
+	} else if (nowH > dayEvents.hours[lastEvNo] || (nowH === dayEvents.hours[lastEvNo] && nowM > dayEvents.minutes[lastEvNo])) {
 		// past the school day, wrap to next morning
 		day++;
 	} else {
 		// calculate next event
-		while (eventNo < 9 && (nowH > dayEvents.hours[eventNo] || (nowH == dayEvents.hours[eventNo] && nowM > dayEvents.minutes[eventNo]))) {
+		while (eventNo < lastEvNo && (nowH > dayEvents.hours[eventNo] || (nowH == dayEvents.hours[eventNo] && nowM > dayEvents.minutes[eventNo]))) {
 			eventNo++;
 		}
 	}
