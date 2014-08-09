@@ -146,7 +146,7 @@ BellEvent.prototype.getDesc = function getDesc() {
 			}
 		}
 
-		return "Period " + this._desc;
+		return "Period " + pNum;
 	}
 
 	if (this.holidays) {
@@ -191,7 +191,7 @@ BellEvent.getNext = function getNext() {
 	var day = now.getDay() - 1;
 	var nowH = now.getHours(), nowM = now.getMinutes();
 	var dayEvents = bells[day], eventNo = 0;
-	var lastEvNo = dayEvents.hours.length - 1;
+	var lastEvNo = dayEvents && dayEvents.hours.length - 1;
 
 	if (day === -1 || day === 5) {
 		// weekend, wrap around to Monday
