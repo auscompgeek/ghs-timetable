@@ -2,6 +2,10 @@
 	text-align: center;
 }
 
+#bell-current {
+	font-size: 1.5em;
+}
+
 #bell-descript {
 	font-size: 4em;
 }
