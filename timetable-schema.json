@@ -5,6 +5,9 @@
 	"yearGroup": {
 		"type": "unsigned int"
 	},
+	"useTimetable": {
+		"type": "bool"
+	},
 	"classes": {
 		"type": "dict[]",
 		"fields": {
@@ -14,17 +17,17 @@
 			},
 			"room": {
 				"type": "string",
-				"nullable": false,
+				"nullable": true,
 				"help_text": "The classroom the class is normally in."
 			}
 		}
 	},
 	"days": {
-		"type": "dict[][]",
+		"type": "dict[5][6]",
 		"help_text": "an array storing an array of classes",
 		"fields": {
 			"classId": {
-				"type": "unsigned int",
+				"type": "int",
 				"nullable": false,
 				"help_text": "index from classes array (-1 for study periods, -2 for non-class extension periods)"
 			},
