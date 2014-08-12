@@ -108,6 +108,7 @@ function BellEvent(day, eventNo) {
 	}
 
 	this.day = day;
+	this.eventNo = eventNo;
 	this.hour = dayEvents.hours[eventNo];
 	this.minute = dayEvents.minutes[eventNo];
 	this._desc = dayEvents.desc[eventNo];
@@ -238,6 +239,12 @@ function theFinalCountdown() {
 	.on("finish.countdown", finishCountdown);
 
 	$("#bell-descript").text(ev.getDesc());
+
+	if (ev.eventNo > 0 && typeof ev.day === "number" && ev.eventNo != bells[ev.day].desc.length - 1) {
+		$("#bell-current").text("Now: " + new BellEvent(ev.day, ev.eventNo - 1).getDesc()).show();
+	} else {
+		$("#bell-current").hide();
+	}
 }
 
 // school computers don't even know what time it is
