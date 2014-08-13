@@ -7,12 +7,13 @@ $(function () {
 	}
 
 	if (localStorage.useTimetable) {
-		$("#check-usetimetable").check();
+		document.getElementById("check-usetimetable").checked = true;
 	} else {
+		document.getElementById("check-usetimetable").checked = false;
 		disablePage();
 	}
 
-	$("#check-usetimetable").on("check", toggleUseTimetable);
+	$("#check-usetimetable").on("click", toggleUseTimetable);
 });
 
 // disable everything (besides #check-usetimetable)
