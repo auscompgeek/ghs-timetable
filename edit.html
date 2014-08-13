@@ -45,11 +45,48 @@
 
 		<label><input type="checkbox" id="check-usetimetable" /> Use timetable?</label>
 
-		<button id="btn-import" onclick="openImport()">Import</button>
-		<button id="btn-export" onclick="openExport()">Export</button>
+		<button class="btn btn-primary" data-toggle="modal" data-target="#import">Import</button>
+		<button class="btn btn-primary" data-toggle="modal" data-target="#export">Export</button>
 	</div>
 
 	<marquee><img src="http://www.uncletobys.com.au/wp-content/uploads/2010/08/UNCLE-TOBYS-CRUNCHY-CHOC-SMALL.png" /></marquee>
+
+	<div id="import" class="modal fade" tabIndex="-1" role="dialog" aria-labelledby="modal-import-label" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="modal-import-label">Import</h4>
+				</div>
+				<div class="modal-body">
+					<p>Paste your exported timetable data below and press "Save changes".</p>
+					<textarea id="text-import"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onclick="doImport()">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="export" class="modal fade" tabIndex="-1" role="dialog" aria-labelledby="modal-export-label" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="modal-export-label">Export</h4>
+				</div>
+				<div class="modal-body">
+					<p>Copy your timetable data below and paste it in the import box within the browser you wish to use it on. This may include your phone or a laptop.</p>
+					<textarea id="text-export"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js" async defer></script>

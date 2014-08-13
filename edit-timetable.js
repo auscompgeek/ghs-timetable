@@ -13,7 +13,9 @@ $(function () {
 		disablePage();
 	}
 
-	$("#check-usetimetable").on("click", toggleUseTimetable);
+	$("#check-usetimetable").click(toggleUseTimetable);
+
+	$("#export").on("show.bs.modal", doExport);
 });
 
 // disable everything (besides #check-usetimetable)
@@ -30,21 +32,19 @@ function toggleUseTimetable() {
 	}
 }
 
-function openExport() {
-	// ...
-}
-
-function openImport() {
-	// ...
-}
-
 function doImport() {
-	var text = this.text;
-	var obj = JSON.parse(this.text);
+	var obj = JSON.parse($("#text-import").text());
 	if (obj.classes) {
 		localStorage.classes = JSON.stringify(this.text);
 	}
 	if (obj.days) {
 		localStorage.days = JSON.stringify(this.text);
 	}
+}
+
+function doExport() {
+	$("#text-export").text(JSON.stringify({
+		classes: JSON.parse(localStorage.classes),
+		days: JSON.parse(localStorage.days)
+	}));
 }
