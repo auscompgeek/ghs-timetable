@@ -43,7 +43,7 @@
 
 		<p>Meanwhile, here's some muesli bars.</p>
 
-		<label><input type="checkbox" id="check-usetimetable" /> Use timetable?</label>
+		<div class="checkbox"><label><input type="checkbox" id="check-usetimetable" /> Use timetable?</label></div>
 
 		<button class="btn btn-primary" data-toggle="modal" data-target="#import">Import</button>
 		<button class="btn btn-primary" data-toggle="modal" data-target="#export">Export</button>
@@ -60,7 +60,7 @@
 				</div>
 				<div class="modal-body">
 					<p>Paste your exported timetable data below and press "Save changes".</p>
-					<textarea id="text-import"></textarea>
+					<textarea id="text-import" class="form-control" rows="9"></textarea>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -79,7 +79,7 @@
 				</div>
 				<div class="modal-body">
 					<p>Copy your timetable data below and paste it in the import box within the browser you wish to use it on. This may include your phone or a laptop.</p>
-					<textarea id="text-export"></textarea>
+					<textarea id="text-export" class="form-control" rows="9"></textarea>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
