@@ -117,6 +117,7 @@ function BellEvent(day, eventNo) {
 BellEvent.prototype.getDesc = function getDesc() {
 	if (typeof this._desc === "number") {
 		var pNum = this._desc;
+		var desc = "Period " + pNum;
 
 		if (window.localStorage && localStorage.useTimetable) {
 			var todayClasses = JSON.parse(localStorage.days)[this.day];
@@ -136,18 +137,23 @@ BellEvent.prototype.getDesc = function getDesc() {
 					}
 
 					var subject = classes[period.classId];
-					var room = period.room || subject.room;
-					var desc = "P" + pNum + ": " + subject.subjectName;
+					var room = period.room;
+
+					if (subject) {
+						room = room || subject.room;
+						if (subject.subjectName) {
+							desc = "P" + pNum + ": " + subject.subjectName;
+						}
+					}
 
 					if (room) {
 						desc += " (" + room + ")";
 					}
-					return desc;
 				}
 			}
 		}
 
-		return "Period " + pNum;
+		return desc;
 	}
 
 	if (this.holidays) {
@@ -226,21 +232,23 @@ function updateCountdown(event) {
 
 function finishCountdown() {
 	$(this).text("... about now.");
-	// set the new countdown after a minute
+	// set the new countdown after half a minute
 	setTimeout(theFinalCountdown, 30000);
 }
 
 // https://youtu.be/9jK-NcRmVcw
 function theFinalCountdown() {
-	var ev = BellEvent.getNext();
+	setCountdown(BellEvent.getNext());
+}
 
+function setCountdown(ev) {
 	$("#bell-countdown").countdown(ev.getDate())
 	.on("update.countdown", updateCountdown)
 	.on("finish.countdown", finishCountdown);
 
 	$("#bell-descript").text(ev.getDesc());
 
-	if (ev.eventNo > 0 && typeof ev.day === "number" && ev.eventNo != bells[ev.day].desc.length - 1) {
+	if (ev.eventNo > 0 && typeof ev.day === "number") {
 		$("#bell-current").text("Now: " + new BellEvent(ev.day, ev.eventNo - 1).getDesc()).show();
 	} else {
 		$("#bell-current").hide();
