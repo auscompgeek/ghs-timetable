@@ -260,14 +260,16 @@ function setCountdown(ev) {
 // amount of time system clock is ahead by
 var secsOffset = 0;
 
-$.ajax({
-	url: "http://vovo.id.au/scripts/time.php",
-	async: false,
-	dataType: "text",
-	success: function (data) {
-		secsOffset = (Date.now()/1000>>>0) - data;
-	}
-});
+function getRealTime() {
+	$.ajax({
+		url: "http://vovo.id.au/scripts/time.php",
+		async: false,
+		dataType: "text",
+		success: function (data) {
+			secsOffset = (Date.now()/1000>>>0) - data;
+		}
+	});
+}
 
 // oh god holidays
 
@@ -303,5 +305,9 @@ function getTerm(date) {
 	return CHRISTMAS;
 }
 
-$.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75", parseTerms)
-	.always(theFinalCountdown);
+$(function () {
+	getRealTime();
+
+	$.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75", parseTerms)
+		.always(theFinalCountdown);
+});
