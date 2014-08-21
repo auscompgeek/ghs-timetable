@@ -28,12 +28,14 @@ $(function () {
 		var tds = $("#tt-p" + p + " td");
 		for (var d = 1; d < 6; d++) {
 			var td = $(tds[d]);
-			td.click((function (day, pNum) {
-				return function () {
-					doOpenEditPeriod(day, pNum);
-				};
-			})(d-1, p));
 			timetableCellDisplay(td, d-1, p, subjects, periods);
+			if (!(d === 3 && p === 4)) {
+				td.click((function (day, pNum) {
+					return function () {
+						doOpenEditPeriod(day, pNum);
+					};
+				})(d-1, p));
+			}
 		}
 	}
 });
@@ -53,10 +55,21 @@ function toggleUseTimetable() {
 }
 
 function timetableCellDisplay(td, day, pNum, subjects, periods) {
+	if (day === 2 && pNum === 4) {
+		td.text("Sport");
+		return;
+	}
 	var classes = periods[day];
 	if (classes) {
 		var period = classes[pNum];
-		if (period && period.classId > 0) {
+		if (period) {
+			if (period.classId === -2) {
+				return;
+			}
+			if (period.classId === -1) {
+				td.text("Study");
+				return;
+			}
 			var subject = subjects[period.classId];
 			var room = period.room || subject.room;
 			if (room) {
@@ -178,6 +191,32 @@ function savePeriod() {
 	alert("Done!");
 
 	timetableCellDisplay($("#tt-p" + pNum + " td:nth-child(" + (day+1) + ")"), day, pNum, subjects, days);
+}
+
+function doClearPeriod() {
+	var dayName = $("#edit-period-day").text();
+	var day = WEEKDAY_NAMES.indexOf(dayName);
+	if (day === -1) {
+		console.error("unknown day in #edit-period-day text");
+		return;
+	}
+
+	var pNum = $("#edit-period-num").text() >>> 0;
+	if (pNum > 5) {
+		console.error("#edit-period-num out of range");
+		return;
+	}
+
+	if (confirm("Are you sure you want to clear " + dayName + " period " + pNum + "?")) {
+		clearPeriod(day, pNum);
+	}
+}
+
+function clearPeriod(day, pNum) {
+	var days = JSON.parse(localStorage.days);
+	var period = days[day][pNum];
+	delete period.room;
+	period.classId = (pNum === 0 || pNum === 5) ? -2 : -1;
 }
 
 function doReset() {

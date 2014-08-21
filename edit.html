@@ -113,7 +113,7 @@
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label for="input-add-subject-name" class="control-label">Subject</label>
-							<input type="text" id="input-add-subject-name" />
+							<input type="text" id="input-add-subject-name" autofocus required />
 						</div>
 						<div class="form-group">
 							<label for="input-add-subject-room" class="control-label">Room</label>
@@ -139,7 +139,7 @@
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<select for="select-edit-subject" class="control-label">Subject</label>
-							<select type="text" id="select-edit-subject"></select>
+							<select type="text" id="select-edit-subject" autofocus></select>
 						</div>
 						<div class="form-group">
 							<label for="input-edit-subject-room" class="control-label">Room</label>
@@ -148,7 +148,7 @@
 					</form>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal" onclick="doDelSubject()">Delete</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="doDelSubject()">Delete</button>
 					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="doEditSubject()">Save</button>
 				</div>
 			</div>
@@ -166,7 +166,7 @@
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label for="select-period-subject" class="control-label">Subject</label>
-							<select id="select-period-subject"></select>
+							<select id="select-period-subject" autofocus></select>
 						</div>
 						<div class="form-group">
 							<label for="input-period-room" class="control-label">Room</label>
@@ -176,6 +176,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="doClearPeriod()">Clear</button>
 					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="savePeriod()">Save</button>
 				</div>
 			</div>
