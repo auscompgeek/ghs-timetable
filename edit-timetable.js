@@ -32,7 +32,7 @@ $(function () {
 			if (!(d === 3 && p === 4)) {
 				td.click((function (day, pNum) {
 					return function () {
-						doOpenEditPeriod(day, pNum);
+						onOpenEditPeriod(day, pNum);
 					};
 				})(d-1, p));
 			}
