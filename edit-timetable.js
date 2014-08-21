@@ -1,5 +1,7 @@
 // editing the timetable
 
+var WEEKDAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
 $(function () {
 	if (!window.localStorage) {
 		$(".container").prepend($('<div class="alert alert-warning" role="alert">This browser is unsupported. Timetable functionality is unavailable.</div>').alert());
@@ -20,11 +22,18 @@ $(function () {
 	$("#edit-subject").on("show.bs.modal", onOpenEditSubject);
 	$("#edit-period").on("show.bs.modal", onOpenEditPeriod);
 
+	var subjects = JSON.parse(localStorage.classes), periods = JSON.parse(localStorage.days);
+
 	for (var p = 0; p < 6; p++) {
-		var tds = $("#tt-p" + p);
+		var tds = $("#tt-p" + p + " td");
 		for (var d = 1; d < 6; d++) {
-			var td = tds[d];
-			td.on("click", );
+			var td = $(tds[d]);
+			td.click((function (day, pNum) {
+				return function () {
+					doOpenEditPeriod(day, pNum);
+				};
+			})(d-1, p));
+			timetableCellDisplay(td, d-1, p, subjects, periods);
 		}
 	}
 });
@@ -40,6 +49,32 @@ function toggleUseTimetable() {
 		disablePage();
 	} else {
 		localStorage.useTimetable = true;
+	}
+}
+
+function timetableCellDisplay(td, day, pNum, subjects, periods) {
+	var classes = periods[day];
+	if (classes) {
+		var period = classes[pNum];
+		if (period && period.classId > 0) {
+			var subject = subjects[period.classId];
+			var room = period.room || subject.room;
+			if (room) {
+				td.text(subject.subjectName + " (" + room + ")");
+			} else {
+				td.text(subject.subjectName);
+			}
+		}
+	}
+}
+
+function resetTimetableDisplay() {
+	var subjects = JSON.parse(localStorage.classes), periods = JSON.parse(localStorage.days);
+	for (var p = 0; p < 6; p++) {
+		var tds = $("#tt-p" + p + " td");
+		for (var d = 1; d < 6; d++) {
+			timetableCellDisplay($(tds[d]), d-1, p, subjects, periods);
+		}
 	}
 }
 
@@ -71,15 +106,28 @@ function doExport() {
 }
 
 function onOpenAddSubject() {
-	//
+	var inputName = document.getElementById("input-add-subject-name");
+	inputName.value = "";
+	document.getElementById("input-add-subject-room").value = "";
 }
 
 function onOpenEditSubject() {
 	//
 }
 
-function onOpenEditPeriod() {
-	//
+function onOpenEditPeriod(day, pNum) {
+	$("#edit-period-day").text(WEEKDAY_NAMES[day]);
+	$("#edit-period-num").text(pNum);
+	document.getElementById("input-period-room").value = "";
+
+	var subjects = JSON.parse(localStorage.classes), selectSubjectElem = document.getElementById("select-edit-subject");
+	selectSubjectElem.innerHTML = "";
+	for (var i = 0; i < subjects.length; i++) {
+		var optElem = document.createElement("option");
+		optElem.value = i;
+		optElem.text = subjects[i].subjectName;
+		selectSubjectElem.add(optElem, null);
+	}
 }
 
 function doAddSubject() {
@@ -101,27 +149,35 @@ function doEditSubject() {
 }
 
 function savePeriod() {
-	var day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].indexOf($("#edit-period-day").text());
+	var day = WEEKDAY_NAMES.indexOf($("#edit-period-day").text());
 	if (day === -1) {
 		console.error("unknown day in #edit-period-day text");
 		return;
 	}
 
 	var pNum = $("#edit-period-num").text() >>> 0;
+	if (pNum > 5) {
+		console.error("#edit-period-num out of range");
+		return;
+	}
 
 	var days = localStorage.days ? JSON.parse(localStorage.days) : [];
 	var periods = days[day] || (days[day] = []);
 	var period = periods[pNum] || (periods[pNum] = {});
 
 	period.classId = document.getElementById("select-period-subject").value;
-	var subject = JSON.parse(localStorage.classes)[period.classId];
+	var subjects = JSON.parse(localStorage.classes)
+	var subject = subjects[period.classId];
 	var room = document.getElementById("input-period-room").value;
-	if (room !== subject.room) {
+	if (room && room !== subject.room) {
 		period.room = room;
 	}
 
+	periods.append(period);
 	localStorage.days = JSON.stringify(days);
 	alert("Done!");
+
+	timetableCellDisplay($("#tt-p" + pNum + " td:nth-child(" + (day+1) + ")"), day, pNum, subjects, days);
 }
 
 function doReset() {
