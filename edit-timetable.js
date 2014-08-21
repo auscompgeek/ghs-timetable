@@ -133,7 +133,7 @@ function onOpenEditPeriod(day, pNum) {
 	$("#edit-period-num").text(pNum);
 	document.getElementById("input-period-room").value = "";
 
-	var subjects = JSON.parse(localStorage.classes), selectSubjectElem = document.getElementById("select-edit-subject");
+	var subjects = JSON.parse(localStorage.classes), selectSubjectElem = document.getElementById("select-period-subject");
 	selectSubjectElem.innerHTML = "";
 	for (var i = 0; i < subjects.length; i++) {
 		var optElem = document.createElement("option");
