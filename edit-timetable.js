@@ -132,12 +132,25 @@ function doOpenEditPeriod(day, pNum) {
 	$("#edit-period-num").text(pNum);
 	document.getElementById("input-period-room").value = "";
 
-	var subjects = JSON.parse(localStorage.classes), selectSubjectElem = document.getElementById("select-period-subject");
+	var subjects = JSON.parse(localStorage.classes), days = JSON.parse(localStorage.days), classId;
+	if (days[day] && days[day][pNum]) {
+		classId = days[day][pNum].classId;
+	}
+
+	var selectSubjectElem = document.getElementById("select-period-subject");
 	selectSubjectElem.innerHTML = "";
+
+	var optElem = document.createElement("option");
+	optElem.text = "--- Pick a subject ---";
+	selectSubjectElem.add(optElem, null);
+
 	for (var i = 0; i < subjects.length; i++) {
-		var optElem = document.createElement("option");
+		optElem = document.createElement("option");
 		optElem.value = i;
 		optElem.text = subjects[i].subjectName;
+		if (i === classId) {
+			optElem.selected = true;
+		}
 		selectSubjectElem.add(optElem, null);
 	}
 
@@ -187,11 +200,12 @@ function savePeriod() {
 		period.room = room;
 	}
 
-	periods.append(period);
+	periods[pNum] = period;
 	localStorage.days = JSON.stringify(days);
 	alert("Done!");
 
-	timetableCellDisplay($("#tt-p" + pNum + " td:nth-child(" + (day+1) + ")"), day, pNum, subjects, days);
+	// damn you selectors and your 1-indexing
+	timetableCellDisplay($("#tt-p" + pNum + " td:nth-child(" + (day+2) + ")"), day, pNum, subjects, days);
 }
 
 function doClearPeriod() {

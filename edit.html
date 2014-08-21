@@ -39,9 +39,7 @@
 			</div>
 		</noscript>
 
-		<p class="lead">Coming Soon&trade;.</p>
-
-		<p>Meanwhile, here's a test image.</p>
+		<p>Enable the timetable features and then add your subjects!</p>
 
 		<div class="checkbox"><label><input type="checkbox" id="check-usetimetable" /> Use timetable?</label></div>
 
@@ -49,6 +47,8 @@
 		<button class="btn btn-primary" data-toggle="modal" data-target="#export">Export</button>
 		<button class="btn btn-primary" data-toggle="modal" data-target="#add-subject">Add subject</button>
 		<button class="btn btn-primary" onclick="doReset()">Reset</button>
+
+		<p>Click a period to edit it!</p>
 
 		<table id="timetable-edit" class="table table-striped table-bordered table-hover">
 			<thead><tr><th>Period</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr></thead>
@@ -61,8 +61,6 @@
 				<tr id="tt-p5"><td>Afternoon</td><td></td><td></td><td></td><td></td><td></td></tr>
 			</tbody>
 		</table>
-
-		<img src="//upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/672px-SMPTE_Color_Bars.svg.png" />
 	</div>
 
 	<div id="import" class="modal fade" tabIndex="-1" role="dialog" aria-labelledby="modal-import-label" aria-hidden="true">
@@ -112,12 +110,12 @@
 				<div class="modal-body">
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
-							<label for="input-add-subject-name" class="control-label">Subject</label>
-							<input type="text" id="input-add-subject-name" autofocus required />
+							<label for="input-add-subject-name" class="col-sm-2 control-label">Subject</label>
+							<div class="col-sm-10"><input type="text" id="input-add-subject-name" class="form-control" autofocus required /></div>
 						</div>
 						<div class="form-group">
-							<label for="input-add-subject-room" class="control-label">Room</label>
-							<input type="text" id="input-add-subject-room" />
+							<label for="input-add-subject-room" class="col-sm-2 control-label">Room</label>
+							<div class="col-sm-10"><input type="text" id="input-add-subject-room" class="form-control" /></div>
 						</div>
 					</form>
 				</div>
@@ -139,12 +137,12 @@
 				<div class="modal-body">
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
-							<select for="select-edit-subject" class="control-label">Subject</label>
-							<select type="text" id="select-edit-subject" autofocus></select>
+							<select for="select-edit-subject" class="col-sm-2 control-label">Subject</label>
+							<div class="col-sm-10"><select type="text" id="select-edit-subject" autofocus></select></div>
 						</div>
 						<div class="form-group">
-							<label for="input-edit-subject-room" class="control-label">Room</label>
-							<input type="text" id="input-edit-subject-room" />
+							<label for="input-edit-subject-room" class="col-sm-2 control-label">Room</label>
+							<div class="col-sm-10"><input type="text" id="input-edit-subject-room" class="form-control" /></div>
 						</div>
 					</form>
 				</div>
@@ -167,12 +165,12 @@
 				<div class="modal-body">
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
-							<label for="select-period-subject" class="control-label">Subject</label>
-							<select id="select-period-subject" autofocus></select>
+							<label for="select-period-subject" class="col-sm-2 control-label">Subject</label>
+							<div class="col-sm-10"><select id="select-period-subject" class="form-control" autofocus></select></div>
 						</div>
 						<div class="form-group">
-							<label for="input-period-room" class="control-label">Room</label>
-							<input type="text" id="input-period-room" />
+							<label for="input-period-room" class="col-sm-2 control-label">Room</label>
+							<div class="col-sm-10"><input type="text" id="input-period-room" class="form-control" /></div>
 						</div>
 					</form>
 				</div>
