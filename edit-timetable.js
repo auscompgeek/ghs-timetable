@@ -229,9 +229,10 @@ function doClearPeriod() {
 
 function clearPeriod(day, pNum) {
 	var days = JSON.parse(localStorage.days);
-	var period = days[day][pNum];
-	delete period.room;
-	period.classId = (pNum === 0 || pNum === 5) ? -2 : -1;
+	days[day][pNum] = {
+		classId: (pNum === 0 || pNum === 5) ? -2 : -1
+	};
+	localStorage.days = JSON.stringify(days);
 }
 
 function doReset() {
