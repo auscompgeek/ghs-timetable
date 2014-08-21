@@ -192,7 +192,7 @@ function savePeriod() {
 	var periods = days[day] || (days[day] = []);
 	var period = periods[pNum] || (periods[pNum] = {});
 
-	period.classId = document.getElementById("select-period-subject").value;
+	period.classId = document.getElementById("select-period-subject").value >>> 0;
 	var subjects = JSON.parse(localStorage.classes)
 	var subject = subjects[period.classId];
 	var room = document.getElementById("input-period-room").value;
