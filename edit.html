@@ -41,15 +41,37 @@
 
 		<p class="lead">Coming Soon&trade;.</p>
 
-		<p>Meanwhile, here's some muesli bars.</p>
+		<p>Meanwhile, here's a test image.</p>
 
 		<div class="checkbox"><label><input type="checkbox" id="check-usetimetable" /> Use timetable?</label></div>
 
 		<button class="btn btn-primary" data-toggle="modal" data-target="#import">Import</button>
 		<button class="btn btn-primary" data-toggle="modal" data-target="#export">Export</button>
-	</div>
 
-	<marquee><img src="http://www.uncletobys.com.au/wp-content/uploads/2010/08/UNCLE-TOBYS-CRUNCHY-CHOC-SMALL.png" /></marquee>
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label for="add-subject-name" class="control-label">Subject</label>
+				<input type="text" id="input-add-subject-name" />
+			</div>
+			<div class="form-group">
+				<label for="add-subject-room" class="control-label">Room</label>
+				<input type="text" id="input-add-subject-room" />
+			</div>
+			<button type="submit" class="btn btn-submit">Save</button>
+		</form>
+
+		<table>
+			<tr><th>Period</th><th>Monday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr>
+			<tr id="tt-p0"><td>Morning</td></tr>
+			<tr id="tt-p1"><td>1</td></tr>
+			<tr id="tt-p2"><td>2</td></tr>
+			<tr id="tt-p3"><td>3</td></tr>
+			<tr id="tt-p4"><td>4</td></tr>
+			<tr id="tt-p5"><td>Afternoon</td></tr>
+		</table>
+
+		<img src="//upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/672px-SMPTE_Color_Bars.svg.png" />
+	</div>
 
 	<div id="import" class="modal fade" tabIndex="-1" role="dialog" aria-labelledby="modal-import-label" aria-hidden="true">
 		<div class="modal-dialog">
