@@ -75,14 +75,14 @@ function addExtClasses() {
 			var dayEvents = bells[day];
 			var classes = days[day];
 
-			if (classes[0] && classes[0].classId != -2) {
+			if (classes && classes[0] && classes[0].classId != -2) {
 				// P0 aka morning class
 				dayEvents.hours.unshift(7);
 				dayEvents.minutes.unshift(30);
 				dayEvents.desc.unshift(0);
 			}
 
-			if (classes[5] && classes[5].classId != -2) {
+			if (classes && classes[5] && classes[5].classId != -2) {
 				// P5 aka afternoon class
 				dayEvents.hours.push(4);
 				dayEvents.minutes.push(0);
