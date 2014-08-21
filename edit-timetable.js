@@ -20,7 +20,6 @@ $(function () {
 	$("#export").on("show.bs.modal", doExport);
 	$("#add-subject").on("show.bs.modal", onOpenAddSubject);
 	$("#edit-subject").on("show.bs.modal", onOpenEditSubject);
-	$("#edit-period").on("show.bs.modal", onOpenEditPeriod);
 
 	var subjects = JSON.parse(localStorage.classes), periods = JSON.parse(localStorage.days);
 
@@ -32,7 +31,7 @@ $(function () {
 			if (!(d === 3 && p === 4)) {
 				td.click((function (day, pNum) {
 					return function () {
-						onOpenEditPeriod(day, pNum);
+						doOpenEditPeriod(day, pNum);
 					};
 				})(d-1, p));
 			}
@@ -128,7 +127,7 @@ function onOpenEditSubject() {
 	//
 }
 
-function onOpenEditPeriod(day, pNum) {
+function doOpenEditPeriod(day, pNum) {
 	$("#edit-period-day").text(WEEKDAY_NAMES[day]);
 	$("#edit-period-num").text(pNum);
 	document.getElementById("input-period-room").value = "";
@@ -141,6 +140,8 @@ function onOpenEditPeriod(day, pNum) {
 		optElem.text = subjects[i].subjectName;
 		selectSubjectElem.add(optElem, null);
 	}
+
+	$("#edit-period").modal();
 }
 
 function doAddSubject() {
