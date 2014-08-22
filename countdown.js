@@ -176,6 +176,9 @@ BellEvent.prototype.getDate = function getDate() {
 		} else if (weekday === this.day) {
 			// event is tomorrow
 			date.setDate(date.getDate() + 1);
+		} else if (weekday === 5 && !this.day) {
+			// Friday after school, event is Monday
+			date.setDate(date.getDate() + 3);
 		}
 	}
 
@@ -206,6 +209,10 @@ BellEvent.getNext = function getNext() {
 	} else if (nowH > dayEvents.hours[lastEvNo] || (nowH === dayEvents.hours[lastEvNo] && nowM > dayEvents.minutes[lastEvNo])) {
 		// past the school day, wrap to next morning
 		day++;
+		if (day === 5) {
+			// Friday after school, wrap to Monday
+			day = 0;
+		}
 	} else {
 		// calculate next event
 		while (eventNo < lastEvNo && (nowH > dayEvents.hours[eventNo] || (nowH == dayEvents.hours[eventNo] && nowM > dayEvents.minutes[eventNo]))) {
