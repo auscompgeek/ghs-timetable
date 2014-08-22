@@ -21,7 +21,7 @@ $(function () {
 	$("#add-subject").on("show.bs.modal", onOpenAddSubject);
 	$("#edit-subject").on("show.bs.modal", onOpenEditSubject);
 
-	var subjects = JSON.parse(localStorage.classes), periods = JSON.parse(localStorage.days);
+	var subjects = JSON.parse(localStorage.classes || "[]"), periods = JSON.parse(localStorage.days || "[]");
 
 	for (var p = 0; p < 6; p++) {
 		var tds = $("#tt-p" + p + " td");
@@ -132,7 +132,7 @@ function doOpenEditPeriod(day, pNum) {
 	$("#edit-period-num").text(pNum);
 	document.getElementById("input-period-room").value = "";
 
-	var subjects = JSON.parse(localStorage.classes), days = JSON.parse(localStorage.days), classId;
+	var subjects = JSON.parse(localStorage.classes), days = JSON.parse(localStorage.days || "[]"), classId;
 	if (days[day] && days[day][pNum]) {
 		classId = days[day][pNum].classId;
 	}
