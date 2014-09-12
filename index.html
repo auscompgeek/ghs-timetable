@@ -6,7 +6,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<link href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.2.0+1/darkly/bootstrap.min.css" rel="stylesheet" />
-	<link href="style.css" rel="stylesheet" />
+	<style type="text/css">
+	#bell {
+		text-align: center;
+	}
+
+	#bell-current {
+		font-size: 1.5em;
+	}
+
+	#bell-descript {
+		font-size: 4em;
+	}
+
+	#bell-countdown {
+		font-size: 6em;
+	}
+
+	@media (max-width: 767px) {
+		#bell-countdown {
+			font-size: 5em;
+		}
+	}
+	</style>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-static-top" role="navigation">
