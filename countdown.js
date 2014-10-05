@@ -120,7 +120,8 @@ BellEvent.prototype.getDesc = function getDesc() {
 		var desc = "Period " + pNum;
 
 		if (window.localStorage && localStorage.useTimetable) {
-			var todayClasses = JSON.parse(localStorage.days)[this.day];
+			var day = this.holidays ? this.day.getDay() - 1 : this.day;
+			var todayClasses = JSON.parse(localStorage.days)[day];
 			var classes = JSON.parse(localStorage.classes);
 
 			if (classes && classes.length && todayClasses && todayClasses.length >= pNum) {
