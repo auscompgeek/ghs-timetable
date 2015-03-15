@@ -55,7 +55,7 @@ function toggleUseTimetable() {
 
 function timetableCellDisplay(td, day, pNum, subjects, periods) {
 	if (day === 2 && pNum === 4) {
-		td.text("Sport");
+		//td.text("Sport");
 		return;
 	}
 	var classes = periods[day];
@@ -104,7 +104,7 @@ function doImport() {
 		if (obj.days) {
 			localStorage.days = JSON.stringify(obj.days);
 		}
-		alert("Done!");
+		//alert("Done!");
 	} else {
 		alert("That doesn't look like timetable data!");
 	}
@@ -164,7 +164,7 @@ function doAddSubject() {
 		room: document.getElementById("input-add-subject-room").value
 	});
 	localStorage.classes = JSON.stringify(subjects);
-	alert("Done!");
+	//alert("Done!");
 }
 
 function doDelSubject() {
@@ -202,7 +202,7 @@ function savePeriod() {
 
 	periods[pNum] = period;
 	localStorage.days = JSON.stringify(days);
-	alert("Done!");
+	//alert("Done!");
 
 	// damn you selectors and your 1-indexing
 	timetableCellDisplay($("#tt-p" + pNum + " td:nth-child(" + (day+2) + ")"), day, pNum, subjects, days);
@@ -239,6 +239,6 @@ function doReset() {
 	if (confirm("Are you sure you wish to reset your timetable data?")) {
 		localStorage.classes = "[]";
 		localStorage.days = "[]";
-		alert("Done!");
+		//alert("Done!");
 	}
 }
