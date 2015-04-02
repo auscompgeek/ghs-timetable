@@ -270,7 +270,7 @@ var secsOffset = 0;
 
 function getRealTime() {
 	$.ajax({
-		url: "http://vovo.id.au/scripts/time.php",
+		url: "//vovo.id.au/scripts/time.php",
 		async: false,
 		dataType: "text",
 		success: function (data) {
