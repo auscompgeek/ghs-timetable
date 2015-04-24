@@ -21,6 +21,10 @@ $(function () {
 	$("#add-subject").on("show.bs.modal", onOpenAddSubject);
 	$("#edit-subject").on("show.bs.modal", onOpenEditSubject);
 
+	showTimetable();
+});
+
+function showTimetable() {
 	var subjects = JSON.parse(localStorage.classes || "[]"), periods = JSON.parse(localStorage.days || "[]");
 
 	for (var p = 0; p < 6; p++) {
@@ -37,7 +41,7 @@ $(function () {
 			}
 		}
 	}
-});
+}
 
 // disable everything (besides #check-usetimetable)
 function disablePage() {
@@ -104,7 +108,7 @@ function doImport() {
 		if (obj.days) {
 			localStorage.days = JSON.stringify(obj.days);
 		}
-		//alert("Done!");
+		showTimetable();
 	} else {
 		alert("That doesn't look like timetable data!");
 	}
