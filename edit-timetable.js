@@ -21,10 +21,6 @@ $(function () {
 	$("#add-subject").on("show.bs.modal", onOpenAddSubject);
 	$("#edit-subject").on("show.bs.modal", onOpenEditSubject);
 
-	showTimetable();
-});
-
-function showTimetable() {
 	var subjects = JSON.parse(localStorage.classes || "[]"), periods = JSON.parse(localStorage.days || "[]");
 
 	for (var p = 0; p < 6; p++) {
@@ -41,7 +37,7 @@ function showTimetable() {
 			}
 		}
 	}
-}
+});
 
 // disable everything (besides #check-usetimetable)
 function disablePage() {
@@ -108,7 +104,7 @@ function doImport() {
 		if (obj.days) {
 			localStorage.days = JSON.stringify(obj.days);
 		}
-		showTimetable();
+		resetTimetableDisplay();
 	} else {
 		alert("That doesn't look like timetable data!");
 	}
@@ -197,7 +193,7 @@ function savePeriod() {
 	var period = periods[pNum] || (periods[pNum] = {});
 
 	period.classId = document.getElementById("select-period-subject").value >>> 0;
-	var subjects = JSON.parse(localStorage.classes)
+	var subjects = JSON.parse(localStorage.classes);
 	var subject = subjects[period.classId];
 	var room = document.getElementById("input-period-room").value;
 	if (room && room !== subject.room) {
@@ -237,6 +233,7 @@ function clearPeriod(day, pNum) {
 		classId: (pNum === 0 || pNum === 5) ? -2 : -1
 	};
 	localStorage.days = JSON.stringify(days);
+	timetableCellDisplay($("#tt-p" + pNum + " td:nth-child(" + (day+2) + ")"), day, pNum, JSON.parse(localStorage.subjects), days);
 }
 
 function doReset() {
