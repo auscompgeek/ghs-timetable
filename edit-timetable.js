@@ -128,6 +128,11 @@ function onOpenEditSubject() {
 }
 
 function doOpenEditPeriod(day, pNum) {
+	if (!localStorage.classes) {
+		alert("You need to add subjects first!");
+		return false;
+	}
+
 	$("#edit-period-day").text(WEEKDAY_NAMES[day]);
 	$("#edit-period-num").text(pNum);
 	document.getElementById("input-period-room").value = "";
