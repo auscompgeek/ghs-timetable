@@ -316,6 +316,7 @@ function getTerm(date) {
 $(function () {
 	getRealTime();
 
-	$.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75", parseTerms)
-		.always(theFinalCountdown);
+	//$.getJSON("https://www.kimonolabs.com/api/8puk29vu?apikey=CynVJv6skGTKh5o5Q2CDEmWo1ix62b75&kimmodify=1", parseTerms)
+	//	.always(theFinalCountdown);
+	theFinalCountdown();
 });
